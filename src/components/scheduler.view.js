@@ -1,11 +1,18 @@
 import React from 'react';
+import Row from './row';
 
 const isHourMorning = (time) => {
   return time < 12;
 };
 
 const SchedulerView = (props) => {
-  const { todaysDate, hours, onClickWrapper } = props;
+  const {
+    todaysDate,
+    hours,
+    currentText,
+    onClickWrapper,
+    onChangeWrapper,
+  } = props;
   return (
     <div className="container-fluid">
       <div className="row">
@@ -18,12 +25,14 @@ const SchedulerView = (props) => {
               isHourMorning(hour.time) ? hour.time : hour.time - 12
             }:00 ${isHourMorning(hour.time) ? 'AM' : 'PM'}`;
             return (
-              <div key={i}>
-                {showHour} - {hour.text}
-                <button onClick={onClickWrapper(hour)}>
-                  Temporary Save Button
-                </button>
-              </div>
+              <Row
+                key={i}
+                showHour={showHour}
+                hour={hour}
+                onClickHandler={onClickWrapper(hour)}
+                onChangeHandler={onChangeWrapper(hour.time)}
+                currentText={currentText}
+              />
             );
           })}
         </div>

@@ -15,13 +15,25 @@ import moment from 'moment';
 
 const SchedulerContainer = (props) => {
   const [hours, setHours] = useState([]); // state for hours each hour is going to have a date, time, saveText
+  const [currentText, setCurrentText] = useState({});
   const [todaysDate, setTodaysDate] = useState(
     moment(new Date()).format('MM/DD/YY')
   );
 
+  const onChangeWrapper = (time) => (e) => {
+    const text = e.target.value;
+    setCurrentText((prevState) => ({ ...prevState, [time]: text }));
+  };
+
   const onClickWrapper = (hourObj) => (e) => {
     e.preventDefault();
-    console.log(hourObj);
+    const newHour = { ...hourObj };
+    const text = currentText[hourObj.time];
+    newHour.text = text;
+    const index = hours.findIndex((hour) => hour.time === newHour.time);
+    console.log(index);
+    console.log(hours.slice(0, index).concat(newHour, hours.slice(index + 1)));
+    setHours(hours.slice(0, index).concat(newHour, hours.slice(index + 1)));
   };
 
   useEffect(() => {
@@ -40,6 +52,8 @@ const SchedulerContainer = (props) => {
       todaysDate={todaysDate}
       hours={hours}
       onClickWrapper={onClickWrapper}
+      onChangeWrapper={onChangeWrapper}
+      currentText={currentText}
     />
   );
 };

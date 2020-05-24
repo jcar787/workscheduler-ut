@@ -7,12 +7,17 @@ const Row = (props) => {
     onClickHandler,
     onChangeHandler,
     currentText,
+    className,
   } = props;
   return (
-    <div>
+    <div className={className}>
       <label>{showHour}</label>
-      <textarea value={currentText[hour.time]} onChange={onChangeHandler} />
-      <button onClick={onClickHandler}>Temporary Save Button</button>
+      <textarea
+        value={currentText[hour.time]}
+        onChange={onChangeHandler}
+        className="text-center"
+      />
+      <img onClick={onClickHandler} src="./icons8-save-64.png" />
     </div>
   );
 };

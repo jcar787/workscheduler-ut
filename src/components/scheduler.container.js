@@ -20,6 +20,7 @@ const SchedulerContainer = (props) => {
   const [todaysDate, setTodaysDate] = useState(
     moment(new Date()).format('MM/DD/YY')
   );
+  const currentHour = moment().hour();
   const [isLoaded, setIsLoaded] = useState(false);
 
   const onChangeWrapper = (time) => (e) => {
@@ -78,6 +79,7 @@ const SchedulerContainer = (props) => {
       onClickWrapper={onClickWrapper}
       onChangeWrapper={onChangeWrapper}
       currentText={currentText}
+      currentHour={currentHour}
     />
   );
 };

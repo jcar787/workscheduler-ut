@@ -5,11 +5,24 @@ const isHourMorning = (time) => {
   return time < 12;
 };
 
+const getClassName = (currentHour, rowHour) => {
+  if (currentHour === rowHour) {
+    return 'row current-hour';
+  }
+  if (rowHour < currentHour) {
+    return 'row past-hour';
+  }
+  if (rowHour > currentHour) {
+    return 'row future-hour';
+  }
+};
+
 const SchedulerView = (props) => {
   const {
     todaysDate,
     hours,
     currentText,
+    currentHour,
     onClickWrapper,
     onChangeWrapper,
   } = props;
@@ -32,6 +45,7 @@ const SchedulerView = (props) => {
                 onClickHandler={onClickWrapper(hour)}
                 onChangeHandler={onChangeWrapper(hour.time)}
                 currentText={currentText}
+                className={getClassName(currentHour, hour.time)}
               />
             );
           })}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SchedulerView from './scheduler.view';
 import moment from 'moment';
+import { saveToLS, getFromLS } from '../utils';
 
 // Hour array 9AM - 5PM
 // Hour object
@@ -19,6 +20,7 @@ const SchedulerContainer = (props) => {
   const [todaysDate, setTodaysDate] = useState(
     moment(new Date()).format('MM/DD/YY')
   );
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const onChangeWrapper = (time) => (e) => {
     const text = e.target.value;
@@ -37,16 +39,38 @@ const SchedulerContainer = (props) => {
   };
 
   useEffect(() => {
-    const newHours = [];
-    for (let i = 9; i < 18; i++) {
-      newHours.push({
-        time: i,
-        text: '',
-        date: todaysDate,
-      });
+    const savedHours = getFromLS(todaysDate);
+    if (savedHours && savedHours.length > 0) {
+      const savedText = savedHours.reduce((acum, hour) => {
+        acum[hour.time] = hour.text;
+        return acum;
+      }, {});
+      console.log(savedHours);
+      console.log(savedText);
+      setHours(savedHours);
+      setCurrentText(savedText);
+    } else {
+      const newHours = [];
+      for (let i = 9; i < 18; i++) {
+        newHours.push({
+          time: i,
+          text: '',
+          date: todaysDate,
+        });
+      }
+      setHours(newHours);
     }
-    setHours(newHours);
   }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      saveToLS(todaysDate, hours);
+    } else {
+      setIsLoaded(true);
+    }
+    console.log(isLoaded);
+  }, [hours]);
+
   return (
     <SchedulerView
       todaysDate={todaysDate}
